@@ -10,12 +10,31 @@ class Perceptron:
         d = int(lines[0]) # Size of input
         m = int(lines[1]) # Size of training set
         n = int(lines[2]) # Size of test set
+        learning_rate = 0.2
 
         training_examples = Perceptron.parse_training_examples(lines, m)
         test_examples = Perceptron.parse_test_examples(lines, m)
 
         weights = Perceptron.initialize_weights(d)
-        print(weights)
+
+        for x in range(0, 100):
+            for training_vector in training_examples:
+
+                inputs = training_vector[:d+1]
+                target = training_vector[-1]
+
+                output = Perceptron.calculate_output(
+                        inputs,
+                        weights
+                        )
+                if abs(target - output) > 0.0001:
+                    weights = Perceptron.update_weights(
+                            inputs,
+                            target,
+                            weights,
+                            output,
+                            learning_rate
+                            )
 
 
     def process_input():
@@ -60,11 +79,20 @@ class Perceptron:
             weights.append(random.uniform(-1.0, 1.0))
         return weights
 
-    # def calculate_output():
-        # print()
+    def calculate_output(vector, weights):
+        output = 0
 
-    # def update_weight():
-        # print()
+        for i, x in enumerate(vector):
+            output += x * weights[i]
+
+        return output
+
+    def update_weights(inputs, target, weights, output, learning_rate):
+
+        for i, weight in enumerate(weights):
+            weights[i] = learning_rate * (target - output) * inputs[i]
+
+        return weights
 
 
 def main():

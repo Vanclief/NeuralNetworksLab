@@ -17,8 +17,6 @@ class Perceptron:
 
         weights = Perceptron.initialize_weights(d)
 
-        weights = [-0.5, 1, 1]
-
         weights = Perceptron.train(
                 training_examples,
                 weights,

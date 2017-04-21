@@ -17,12 +17,26 @@ class Perceptron:
 
         weights = Perceptron.initialize_weights(d)
 
-        Perceptron.train(training_examples, weights, d, learning_rate)
-        Perceptron.test(test_examples, weights)
+        weights = Perceptron.train(
+                training_examples,
+                weights,
+                d,
+                learning_rate
+                )
+
+        if weights is None:
+            print ("No solution found")
+        else:
+            Perceptron.test(test_examples, weights)
 
     def train(training_examples, weights, d, learning_rate):
 
-        while True:
+        counter = 0
+
+        while (counter < 1000):
+
+            counter += 1
+
             for training_vector in training_examples:
 
                 inputs = training_vector[:d+1]
@@ -32,21 +46,20 @@ class Perceptron:
                         inputs,
                         weights
                         )
-                if abs(target - output) > 0.001:
-                    weights = Perceptron.update_weights(
+
+                if abs(target - output) == 0:
+                    return weights
+
+                weights = Perceptron.update_weights(
                             inputs,
                             target,
                             weights,
                             output,
                             learning_rate
                             )
-                else:
-                    return 0
 
     def test(test_examples, weights):
 
-        if len(test_examples) == 0:
-            print ("No solution found")
 
         for test_vector in test_examples:
             output = Perceptron.calculate_output(
@@ -74,7 +87,6 @@ class Perceptron:
                 training_examples.append(inputs)
 
         return training_examples
-
 
     def parse_test_examples(lines, m):
         test_examples = []
@@ -107,8 +119,10 @@ class Perceptron:
 
     def update_weights(inputs, target, weights, output, learning_rate):
 
+
         for i, weight in enumerate(weights):
             weights[i] = weight + (learning_rate * (target - output) * inputs[i])
+
 
         return weights
 

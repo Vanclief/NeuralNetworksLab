@@ -17,6 +17,8 @@ class Perceptron:
 
         weights = Perceptron.initialize_weights(d)
 
+        weights = [-0.5, 1, 1]
+
         weights = Perceptron.train(
                 training_examples,
                 weights,
@@ -115,7 +117,7 @@ class Perceptron:
         for i, x in enumerate(vector):
             output += x * weights[i]
 
-        if output >= weights[0]:
+        if output <= 0:
             return 0
 
         return 1

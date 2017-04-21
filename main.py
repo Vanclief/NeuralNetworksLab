@@ -25,7 +25,7 @@ class Perceptron:
                 )
 
         if weights is None:
-            print ("No solution found")
+            print ("no solution found")
         else:
             Perceptron.test(test_examples, weights)
 

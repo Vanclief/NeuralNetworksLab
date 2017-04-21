@@ -36,6 +36,7 @@ class Perceptron:
         while (counter < 1000):
 
             counter += 1
+            error = 0
 
             for training_vector in training_examples:
 
@@ -47,8 +48,7 @@ class Perceptron:
                         weights
                         )
 
-                if abs(target - output) == 0:
-                    return weights
+                error += abs(target - output)
 
                 weights = Perceptron.update_weights(
                             inputs,
@@ -57,6 +57,8 @@ class Perceptron:
                             output,
                             learning_rate
                             )
+            if error == 0:
+                return weights
 
     def test(test_examples, weights):
 

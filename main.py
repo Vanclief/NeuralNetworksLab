@@ -115,10 +115,12 @@ class Perceptron:
         for i, x in enumerate(vector):
             output += x * weights[i]
 
-        return output
+        if output >= weights[0]:
+            return 0
+
+        return 1
 
     def update_weights(inputs, target, weights, output, learning_rate):
-
 
         for i, weight in enumerate(weights):
             weights[i] = weight + (learning_rate * (target - output) * inputs[i])

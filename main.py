@@ -125,9 +125,7 @@ class Perceptron:
         for i, weight in enumerate(weights):
             weights[i] = weight + (learning_rate * (target - output) * inputs[i])
 
-
         return weights
-
 
 def main():
     Perceptron().init()

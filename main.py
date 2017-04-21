@@ -3,21 +3,26 @@ import re, copy
 import random
 
 class Perceptron:
-    def train(self):
+    def init(self):
 
         lines = Perceptron.process_input()
 
         d = int(lines[0]) # Size of input
         m = int(lines[1]) # Size of training set
         n = int(lines[2]) # Size of test set
-        learning_rate = 0.2
+        learning_rate = 0.01
 
         training_examples = Perceptron.parse_training_examples(lines, m)
         test_examples = Perceptron.parse_test_examples(lines, m)
 
         weights = Perceptron.initialize_weights(d)
 
-        for x in range(0, 100):
+        Perceptron.train(training_examples, weights, d, learning_rate)
+        Perceptron.test(test_examples, weights)
+
+    def train(training_examples, weights, d, learning_rate):
+
+        while True:
             for training_vector in training_examples:
 
                 inputs = training_vector[:d+1]
@@ -27,7 +32,7 @@ class Perceptron:
                         inputs,
                         weights
                         )
-                if abs(target - output) > 0.0001:
+                if abs(target - output) > 0.001:
                     weights = Perceptron.update_weights(
                             inputs,
                             target,
@@ -35,7 +40,20 @@ class Perceptron:
                             output,
                             learning_rate
                             )
+                else:
+                    return 0
 
+    def test(test_examples, weights):
+
+        if len(test_examples) == 0:
+            print ("No solution found")
+
+        for test_vector in test_examples:
+            output = Perceptron.calculate_output(
+                    test_vector,
+                    weights
+                    )
+            print (output)
 
     def process_input():
         lines = []
@@ -51,7 +69,7 @@ class Perceptron:
         training_examples = []
         for index, line in enumerate(lines):
             if index > 2 and index < 3 + m:
-                inputs = [int(x) for x in line.split(',')]
+                inputs = [float(x) for x in line.split(',')]
                 inputs = Perceptron.add_bias(inputs)
                 training_examples.append(inputs)
 
@@ -63,7 +81,7 @@ class Perceptron:
 
         for index, line in enumerate(lines):
             if index > 2 + m:
-                inputs = [int(x) for x in line.split(',')]
+                inputs = [float(x) for x in line.split(',')]
                 inputs = Perceptron.add_bias(inputs)
                 test_examples.append(inputs)
 
@@ -76,7 +94,7 @@ class Perceptron:
     def initialize_weights(d):
         weights = []
         for i in range(d + 1):
-            weights.append(random.uniform(-1.0, 1.0))
+            weights.append(random.uniform(-0.1, 0.1))
         return weights
 
     def calculate_output(vector, weights):
@@ -90,13 +108,13 @@ class Perceptron:
     def update_weights(inputs, target, weights, output, learning_rate):
 
         for i, weight in enumerate(weights):
-            weights[i] = learning_rate * (target - output) * inputs[i]
+            weights[i] = weight + (learning_rate * (target - output) * inputs[i])
 
         return weights
 
 
 def main():
-    Perceptron().train()
+    Perceptron().init()
 
 if __name__ == '__main__':
     main()
